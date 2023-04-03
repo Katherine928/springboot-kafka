@@ -3,6 +3,7 @@ package net.katherine.springbootkafka.kafka;
 import net.katherine.springbootkafka.payload.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -16,6 +17,9 @@ public class JsonKafkaProducer {
 
     private KafkaTemplate<String, User> kafkaTemplate;
 
+    @Value("${spring.kafka.topic-json.name}")
+    private String topicJsonName;
+
     public JsonKafkaProducer(KafkaTemplate<String, User> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -26,7 +30,7 @@ public class JsonKafkaProducer {
 
         Message<User> message = MessageBuilder
                 .withPayload(data)
-                .setHeader(KafkaHeaders.TOPIC, "kafka_json")
+                .setHeader(KafkaHeaders.TOPIC, topicJsonName)
                 .build();
 
         kafkaTemplate.send(message);
